@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>POS with SPA</title>
+    <link rel="stylesheet" href="assest/style/style-pos-system.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-ord {
+            overflow-x: auto;
+        }
+
+        /* General styles */
+        #clz-order-details .table-responsive {
+            overflow-x: auto;
+        }
+
+        /* Custom button width */
+        .custom-width {
+            width: 200px;
+        }
+
+        /* Media query for mobile screens */
+        @media (max-width: 768px) {
+            #order-details {
+                padding: 10px;
+            }
+
+            #order-details .card-body {
+                padding: 15px;
+            }
+
+            #order-details .input-group {
+                flex-direction: column;
+            }
+
+            #order-details .input-group .form-select,
+            #order-details .input-group .btn {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            #order-details .table-responsive {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            #order-details .custom-width {
+                width: 100%;
+            }
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+<!--Login Form-->
+<section id="login-page">
+
+</section>
+<!--Login Form-->
+
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" id="nav">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"><b>Techverse</b></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-home">
+                <!--    <a class="nav-link active" aria-current="page" href="home-page.html">Home</a>-->
+                    <span class="nav-link" id="nav-home">Home</span>
+                </li>
+                <li class="nav-customer">
+                  <!--  <a class="nav-link" href="customer.html">Customer</a>-->
+                    <span class="nav-link" id="nav-customer">Customer</span>
+                </li>
+                <li class="nav-item">
+                  <!--  <a class="nav-link" href="item.html">Item</a>-->
+                    <span class="nav-link" id="nav-item">Item</span>
+                </li>
+                <li class="nav-order">
+                  <!--  <a class="nav-link" href="order.html">Orders</a>-->
+                    <span class="nav-link" id="nav-order">Order</span>
+                </li>
+                <li class="nav-order-details">
+                    <!--  <a class="nav-link" href="item.html">Item</a>-->
+                    <span class="nav-link" id="nav-order-details">OrderDetails</span>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Others
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!--Customer-->
+<section id="customer" class="my-4">
+    <div class="container">
+        <div class="card" id="clz">
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 mb-4">
+                            <fieldset>
+                                <legend class="text-customer"><b>Customer</b></legend>
+                                <nav class="navbar bg-body-tertiary">
+                                    <div class="container-fluid">
+                                        <form class="d-flex w-100" role="search">
+                                            <div class="input-group">
+                                                <select class="form-select" id="inputGroupSelect-customer" aria-label="Example select with button addon">
+                                                    <option selected>Search Customer...</option>
+                                                </select>
+                                                <button class="btn btn-success" type="button">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </nav>
+                                <div class="d-grid gap-2 d-md-block" id="btn-cus">
+                                    <button type="button" class="btn btn-danger my-2" id="delete-customer">Delete</button>
+                                    <button type="button" class="btn btn-primary my-2" id="Update-customer">Update</button>
+                                    <button type="button" class="btn btn-success my-2" id="close-customer">Close</button>
+                                </div>
+                                <table class="table mt-4">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#Id</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Address</th>
+                                        <th scope="col">Contact</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="customer-tbl-body"></tbody>
+                                </table>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-success" id="add" data-bs-toggle="modal" data-bs-target="#staticBackdrop-customer">
+                                    Add
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop-customer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel-customer">New Customer</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label for="customer_id" class="form-label">Customer Id</label>
+                                                        <input type="text" class="form-control" id="customer_id">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="customer_name" class="form-label">Customer Name</label>
+                                                        <input type="text" class="form-control" id="customer_name">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="customer_address" class="form-label">Customer Address</label>
+                                                        <input type="text" class="form-control" id="customer_address">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="customer_tel" class="form-label">Contact Num:</label>
+                                                        <input type="text" class="form-control" id="customer_tel">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button class="btn btn-danger" type="button" id="save-customer">Save</button>
+                                                    <button class="btn btn-warning" type="button" id="revew-customer">Revew</button>
+                                                    <button class="btn btn-primary" type="button" id="close-customer-model">Clear</button>
+                                                    <button class="btn btn-warning" type="button" id="update-customer-model">Update</button>
+                                                    <button class="btn btn-success" type="button" id="exite-customer-model">Exit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-warning mt-3" type="button" id="all-customer">View All Customer</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>  <!--Customer-->
+
+
+<!--item-->
+
+<section id="item" class="my-4">
+    <div class="container">
+        <div class="card" id="clz-item">
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 mb-4">
+                            <fieldset>
+                                <legend class="text-customer"><b>Item</b></legend>
+                                <nav class="navbar bg-body-tertiary">
+                                    <div class="container-fluid">
+                                        <form class="d-flex w-100" role="search">
+                                            <div class="input-group">
+                                                <select class="form-select" id="inputGroupSelect-item" aria-label="Example select with button addon">
+                                                    <option selected>Search Item...</option>
+
+                                                </select>
+                                                <button class="btn btn-success" type="button">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </nav>
+                                <div class="d-grid gap-2 d-md-block" id="btn-itm">
+                                    <button type="button" class="btn btn-danger my-2" id="item-delete">Delete</button>
+                                    <button type="button" class="btn btn-primary my-2" id="update-item">Update</button>
+                                    <button type="button" class="btn btn-success my-2" id="item-close">Close</button>
+                                </div>
+                                <table class="table mt-4">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Item Code</th>
+                                        <th scope="col">Item Name</th>
+                                        <th scope="col">Item Price</th>
+                                        <th scope="col">Item qty</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="item-tbl-body"></tbody>
+                                </table>
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-success" id="add-itm" data-bs-toggle="modal" data-bs-target="#staticBackdrop-item">
+                                    Add
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticBackdropLabel-item">New Item</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form>
+                                                    <div class="mb-3">
+                                                        <label for="itemCode" class="form-label">Item Code</label>
+                                                        <input type="text" class="form-control" id="itemCode">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="item_name" class="form-label">Item Name</label>
+                                                        <input type="text" class="form-control" id="item_name">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="item_price" class="form-label">Item Price</label>
+                                                        <input type="text" class="form-control" id="item_price">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="item_qty" class="form-label">Item qty</label>
+                                                        <input type="text" class="form-control" id="item_qty">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button class="btn btn-danger" type="button" id="item-save">Save</button>
+                                                    <button class="btn btn-warning" type="button" id="revew-item">Revew</button>
+                                                    <button class="btn btn-primary" type="button" id="close-item-model">Clear</button>
+                                                    <button class="btn btn-warning" type="button" id="update-item-model">Update</button>
+                                                    <button class="btn btn-success" type="button" id="exite-item-model">Exit</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-warning mt-3" type="button" id="all-item">View All Item</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--item-->
+
+<!--order-->
+
+<section id="order" class="my-4">
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 id="order-text">Orders</h1>
+                <div class="container text-center">
+                    <div class="row">
+                        <!-- Invoice Details -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form>
+                                        <fieldset>
+                                            <legend id="invoice"><b>Invoice Details</b></legend>
+                                            <div class="row">
+                                                <div class="col-12 mb-3">
+                                                    <label for="order-id" class="form-label"><b>OrderId</b></label>
+                                                    <input type="text" class="form-control" id="order-id" placeholder="Order-id">
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label for="order-date" class="form-label"><b>Date</b></label>
+                                                    <input type="date" class="form-control" id="order-date">
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-12">
+                                                    <label for="customer-id-order" class="form-label"><b>Customer-Id</b></label>
+                                                    <select class="form-select" id="customer-id-order">
+                                                        <option selected>customer-id</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 mb-3">
+                                                    <label for="customer-name-orderForm" class="form-label"><b>Name</b></label>
+                                                    <input type="text" class="form-control" id="customer-name-orderForm" placeholder="Name">
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label for="customer-salary-orderForm" class="form-label"><b>Contact</b></label>
+                                                    <input type="text" class="form-control" id="customer-salary-orderForm" placeholder="Contact">
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label for="customer_address-orderForm" class="form-label"><b>Address</b></label>
+                                                    <input type="text" class="form-control" id="customer_address-orderForm" placeholder="Address">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item Selection -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <form class="row g-3">
+                                        <h3>Item Selection</h3>
+                                        <div class="col-12 mb-3">
+                                            <label for="inputState-item" class="form-label"><b>Item</b></label>
+                                            <select id="inputState-item" class="form-select">
+                                                <option selected>item-code</option>
+                                                <option>...</option>
+                                            </select>
+                                        </div>
+                                      <!--  <div class="col-12 mb-3">
+                                            <label for="item-code-orderForm" class="form-label"><b>Item Code</b></label>
+                                            <input type="text" class="form-control" id="item-code-orderForm">
+                                        </div>-->
+                                        <div class="col-12 mb-3">
+                                            <label for="item-name-orderForm" class="form-label"><b>Item Name</b></label>
+                                            <input type="text" class="form-control" id="item-name-orderForm">
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label for="item-price-orderForm" class="form-label"><b>Price</b></label>
+                                            <input type="text" class="form-control" id="item-price-orderForm">
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label for="qtyHand" class="form-label"><b>QtyHand</b></label>
+                                            <input type="text" class="form-control" id="qtyHand">
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label for="order-qty" class="form-label"><b>Order Qty</b></label>
+                                            <input type="text" class="form-control" id="order-qty">
+                                        </div>
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-danger w-100" id="btn-item"><b>Add Item</b></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Details -->
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="total" placeholder="Total">
+                                        <label for="total">Total</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="subtotal" placeholder="Subtotal">
+                                        <label for="subtotal">Subtotal</label>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <input type="text" class="form-control" id="cash" placeholder="Cash">
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="number" class="form-control" id="discount" placeholder="Discount">
+                                        </div>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" id="balance" placeholder="Balance">
+                                        <label for="balance">Balance</label>
+                                    </div>
+                                    <button type="button" class="btn btn-success w-100" id="btn-order">Pay</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-ord mt-4">
+                        <table class="table" id="tbl-order">
+                            <thead>
+                            <tr>
+                                <th scope="col">Item Code</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="order-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="order-details" class="my-4">
+    <div class="container">
+        <div class="card" id="clz-order-details">
+            <div class="card-body">
+                <form>
+                    <div class="container text-center">
+                        <div class="row">
+                            <div class="col-12 mb-4">
+                                <fieldset>
+                                    <legend class="text-customer"><b>Order Details</b></legend>
+                                    <nav class="navbar bg-body-tertiary">
+                                        <div class="container-fluid">
+                                            <form class="d-flex w-100" role="search">
+                                                <div class="input-group w-100">
+                                                    <select class="form-select" id="inputGroupSelect-orderDetails" aria-label="Example select with button addon">
+                                                        <option selected>Search order...</option>
+                                                        <!-- Populate order options here -->
+                                                    </select>
+                                                    <button class="btn btn-success" type="button" id="search-orderDetails-btn">Search</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </nav>
+                                </fieldset>
+                            </div>
+                            <div class="col-12 mb-4">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Order Id</th>
+                                            <th scope="col">Item Id</th>
+                                            <th scope="col">Unit Price</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="ordrDtails-tbl-body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-center">
+                                <button class="btn btn-warning custom-width" type="button" id="all-orders">View All Orders</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<section id="home">
+    <h1 id="home-text">TechVerse</h1>
+    <h2>Welcome To Techverse BookWorm!!!!</h2>
+
+</section> <!--home section-->
+
+
+
+<script src="assest/lib/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script type="module" src="controller/customer.js"></script>
+<script type="module" src="controller/item.js"></script>
+<script type="module" src="controller/order.js"></script>
+<!--<script type="module" src="controller/orderDetails.js"></script>-->
+
+
+<script>
+
+    $('#customer').css({display:'none'});
+    $('#order').css({display:'none'});
+    $('#item').css({display:'none'});
+    $('#order-details').css({display:'none'});
+    $('#home').css({display:'block'});
+    $('#nav').css({display:'block'});
+
+    /*customer section*/
+  $('#nav-customer').on('click',()=>{
+      $('#customer').css({display:'block'});
+      $('#order').css({display:'none'});
+      $('#item').css({display:'none'});
+      $('#home').css({display:'none'});
+      $('#order-details').css({display:'none'});
+  })
+
+    /*order section*/
+  $('#nav-order').on('click',()=>{
+      $('#customer').css({display:'none'});
+      $('#order').css({display:'block'});
+      $('#item').css({display:'none'});
+      $('#home').css({display:'none'});
+      $('#order-details').css({display:'none'});
+  })
+
+    /*item section*/
+  $('#nav-item').on('click',()=>{
+      $('#customer').css({display:'none'});
+      $('#order').css({display:'none'});
+      $('#item').css({display:'block'});
+      $('#home').css({display:'none'});
+      $('#order-details').css({display:'none'});
+  })
+
+    /*order details section*/
+    $('#nav-order-details').on('click', () => {
+        $('#customer').css({display: 'none'});
+        $('#order').css({display: 'none'});
+        $('#item').css({display: 'none'});
+        $('#order-details').css({display: 'block'});
+        $('#home').css({display:'none'});
+    });
+
+    $('#nav-home').on('click',()=>{
+        $('#customer').css({display: 'none'});
+        $('#order').css({display: 'none'});
+        $('#item').css({display: 'none'});
+        $('#order-details').css({display: 'none'});
+        $('#home').css({display:'block'});
+    });
+
+
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    function validatePassword(password) {
+        return password && password.length >= 6;
+    }
+
+</script>
+
+</body>
+</html>
