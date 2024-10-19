@@ -7,13 +7,11 @@ initialize();
 
 function initialize() {
     $.ajax({
-        url: "http://localhost:8080/customer",
+        url: "http://localhost:8080/pos/api/v1/customer/nextId",
         type: "GET",
-        data: {"nextid": "nextid"},
         success: (res) => {
-            let code = res.substring(1, res.length - 1);
-            console.log(code);
-            $("#customer_id").val(code);
+            console.log(res);
+            $("#customer_id").val(res);
         },
         error: (err) => {
             console.error(err);
@@ -77,12 +75,11 @@ $('#save-customer').on('click', () => {
     let customer = new CustomerModel(customerId, customerName, customerAddress, customerContact);
     let JsonCustomer = JSON.stringify(customer);
     $.ajax({
-        url: "http://localhost:8080/customer",
+        url: "http://localhost:8080/pos/api/v1customer",
         type: "POST",
         data: JsonCustomer,
         headers: {"Content-Type": "application/json"},
         success: (res) => {
-            console.log(JSON.stringify(res));
             alert("Customer saved successfully");
             initialize();
         },
@@ -102,11 +99,10 @@ $('#inputGroupSelect-customer').on('change', () => {
         $('#customer-tbl-body').empty();
 
         $.ajax({
-            url: "http://localhost:8080/customer",
+            url: "http://localhost:8080/pos/api/v1/customer/search/"+$('#inputGroupSelect-customer').val(),
             type: "GET",
-            data: {"id": $('#inputGroupSelect-customer').val()},
             success: (res) => {
-                let customer = JSON.parse(res);
+                let customer = res;
                 let record = `<tr>
                                 <td class="customer-id-value">${customer.id}</td>
                                 <td class="customer-name-value">${customer.name}</td>
@@ -129,11 +125,12 @@ function loadTable() {
     let customerArray = [];
 
     $.ajax({
-        url: "http://localhost:8080/customer",
+        url: "http://localhost:8080/pos/api/v1/customer",
         type: "GET",
-        data: {"all": "getAll"},
         success: (res) => {
-            customerArray = JSON.parse(res);
+            console.log("customer all ");
+            console.log(res);
+            customerArray = res;
             loadComboBoxes(customerArray, "inputGroupSelect-customer");
             loadCombos(customerArray, "customer-id-order");
             customerArray.map((customer) => {
@@ -171,7 +168,7 @@ $("#delete-customer").on('click', () => {
     if (confirmation) {
         let id = $("#inputGroupSelect-customer").val();
         $.ajax({
-            url: "http://localhost:8080/customer?id=" + id,
+            url: "http://localhost:8080/pos/api/v1/customer/" + id,
             type: "DELETE",
             success: (res) => {
                 console.log(JSON.stringify(res));
@@ -194,9 +191,8 @@ $('#revew-customer').on('click', () => {
     var customerId = $('#customer_id').val();
 
     $.ajax({
-        url: "http://localhost:8080/customer",
+        url: "http://localhost:8080/pos/api/v1/customer/"+customerId,
         type: "GET",
-        data: {"id": customerId},
         success: (res) => {
             let customer = JSON.parse(res);
             $("#customer_name").val(customer.name);
@@ -248,7 +244,7 @@ $("#update-customer-model").on("click", () => {
     let customerJson = JSON.stringify(customer);
 
     $.ajax({
-        url: "http://localhost:8080/customer",
+        url: "http://localhost:8080/pos/api/v1/customer/" + updatedId,
         type: "PUT",
         data: customerJson,
         contentType: "application/json",
